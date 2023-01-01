@@ -1,0 +1,35 @@
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#root {
+    width: 100vw;
+    height:100vh;
+    border-color: brown;
+    border-style: solid;
+    display: flex;
+    justify-content: center;
+}
+
+#grid {
+    width: 40%;
+    height: auto;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    border-color:bisque;
+    border-style: solid;
+}
+
+.cell {
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    background-color: blue;
+    border-color: aliceblue;
+    border-style: solid;
+    border-width: 1px;
+}
