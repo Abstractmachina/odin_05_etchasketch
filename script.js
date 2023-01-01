@@ -18,6 +18,7 @@ class View {
         this.app.append(this.gridContainer);
 
         const width = this.gridContainer.offsetWidth;
+        this.gridContainer.style.height = width.toString() + "px";
         const cellWidth = Math.floor(width/17);
 
         for (let i = 0; i < 256; i++) {
