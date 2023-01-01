@@ -3,8 +3,24 @@ class View {
         this.app = document.querySelector('#root');
         this.cells = [256];
 
+        this.controlContainer = document.createElement('div');
+        this.controlContainer.setAttribute('id', 'controls');
+
+        this.resolution = document.createElement('div');
+        this.resolution.classList.add('slider');
+        this.slider = document.createElement('input');
+
+        this.slider.style.type = 'range';
+
+        this.resolution.appendChild(this.slider);
+
+
+
+        //grid setup
         this.gridContainer = document.createElement('div');
         this.gridContainer.setAttribute('id', 'grid');
+
+        //set up cells and add event trigger
         for (let i = 0; i < 256; i++) {
             let cell = document.createElement('div');
             cell.classList.add('cell');
@@ -12,8 +28,6 @@ class View {
             cell.style.backgroundColor = 'rgb(255,255,255)';
             cell.addEventListener('mouseenter', function (e) {
                 var c = document.querySelector("#" + e.target.id);
-                //console.log(c.style.backgroundColor);
-
                 var rgb = View.colorValues(c.style.backgroundColor);
                 for (let i = 0; i < 3;i++) {
                     if (rgb[i] >= 20) rgb[i] = rgb[i] - 20;
@@ -26,10 +40,7 @@ class View {
             this.gridContainer.appendChild(cell);
         }
 
-        
-
-
-        this.app.append(this.gridContainer);
+        this.app.append(this.resolution, this.gridContainer);
 
         const width = this.gridContainer.offsetWidth;
         this.gridContainer.style.height = width.toString() + "px";
