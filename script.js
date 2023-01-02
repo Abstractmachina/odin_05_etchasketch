@@ -9,8 +9,10 @@ class View {
         this.resolution = document.createElement('div');
         this.resolution.classList.add('slider');
         this.slider = document.createElement('input');
-
-        this.slider.style.type = 'range';
+        this.slider.setAttribute("type", "range");
+        this.slider.setAttribute("min", "16");
+        this.slider.setAttribute("max", "100");
+        this.slider.setAttribute("value", "16");
 
         this.resolution.appendChild(this.slider);
 
@@ -52,6 +54,7 @@ class View {
             cell.style.height = cellWidth.toString() + "px";
         }
 
+        console.log(this.slider.value);
         
     }
 
