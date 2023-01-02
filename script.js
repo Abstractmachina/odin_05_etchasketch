@@ -8,7 +8,7 @@ class EtchaSketch {
 }
 
 class View {
-    gridValue = 16;
+    gridSize = 16;
     
     constructor() {
         this.app = document.querySelector('#root');
@@ -32,7 +32,7 @@ class View {
 
         this.gridDisplay = document.createElement('p');
         this.gridDisplay.classList.add('gridDisplay');
-        this.gridDisplay.textContent = 'Grid size: ' + this.gridValue.toString() + " x " + this.gridValue.toString();
+        this.gridDisplay.textContent = 'Grid size: ' + this.gridSize.toString() + " x " + this.gridSize.toString();
         
 
         this.controlContainer.append(this.resolution, this.gridDisplay);
@@ -76,15 +76,51 @@ class View {
 
 
         this.slider.addEventListener('click', (e) => {
-            //this.gridValue = e.target.value;
             this.updateGridSize(e.target.value);
+            this.buildGrid();
         });
         
     }
 
     updateGridSize(val) {
-        this.gridValue = val;
-        this.gridDisplay.textContent = 'Grid size: ' + this.gridValue.toString() + " x " + this.gridValue.toString();
+        this.gridSize = val;
+        this.gridDisplay.textContent = 'Grid size: ' + this.gridSize.toString() + " x " + this.gridSize.toString();
+    }
+
+
+    buildGrid() {
+
+        while (this.gridContainer.lastChild) {
+            this.gridContainer.removeChild(this.gridContainer.lastChild);
+        }
+
+        const sizeSquared = this.gridSize * this.gridSize;
+
+        const width = this.gridContainer.offsetWidth;
+        console.log(width);
+        const cellWidth = Math.floor(width/this.gridSize);
+        console.log(cellWidth);
+
+
+        for (let i = 0; i < sizeSquared; i++) {
+            let cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.setAttribute('id', 'c' + i.toString());
+            cell.style.backgroundColor = 'rgb(255,255,255)';
+            cell.style.width = cellWidth.toString() + "px";
+            cell.style.height = cellWidth.toString() + "px";
+            cell.addEventListener('mouseenter', function (e) {
+                var c = document.querySelector("#" + e.target.id);
+                var rgb = View.colorValues(c.style.backgroundColor);
+                for (let i = 0; i < 3;i++) {
+                    if (rgb[i] >= 20) rgb[i] = rgb[i] - 20;
+                }
+                var newcol = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                c.style.backgroundColor = newcol;
+            });
+            this.cells[i] = cell;
+            this.gridContainer.appendChild(cell);
+        }
     }
 
     onHover(cell) {
