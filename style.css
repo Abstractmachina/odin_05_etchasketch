@@ -1,29 +1,46 @@
 body{
     box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 #root {
     width: 100vw;
     height:100vh;
     border-color: brown;
     border-style: solid;
+    margin: 0;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+.headerContainer {
+    background-color: rgb(0, 0, 0);
+    width: 50%;
+    display: flex;
+    align-items: center;
     justify-content: center;
+
+    color: white;
+}
+
+.mainContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+    flex-grow: 1;
 }
 
 #controls {
     display: flex;
     flex-direction: column;
     align-items: center;
-
     padding: 2em 1em;
+    background-color: rgb(85, 85, 85);
+    flex-grow: 1;
 }
 
 #grid {
-    width: 30%;
-    height: auto;
+    width: 70%;
     margin: 0;
     display: flex;
     flex-wrap: wrap;

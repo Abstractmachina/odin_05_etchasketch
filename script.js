@@ -14,29 +14,45 @@ class View {
         this.app = document.querySelector('#root');
         this.cells = [256];
 
+        //create header
+        this.headerContainer = document.createElement('div');
+        this.headerContainer.classList.add('headerContainer');
+
+        this.title = document.createElement('h1');
+        this.title.classList.add('title');
+        this.title.textContent = 'Etch-A-Sketch';
+
+        this.headerContainer.appendChild(this.title);
+
+        this.app.appendChild(this.headerContainer);
+
+        //create content
+        this.mainContainer = document.createElement('div');
+        this.mainContainer.classList.add('mainContainer');
+        this.app.appendChild(this.mainContainer);
+
         //create controls
         this.controlContainer = document.createElement('div');
         this.controlContainer.setAttribute('id', 'controls');
 
-        this.resolution = document.createElement('div');
-        this.resolution.classList.add('slider');
+        this.sliderContainer = document.createElement('div');
+        this.sliderContainer.classList.add('sliderContainer');
+        this.sliderContainer.style.width = '100%';
         this.slider = document.createElement('input');
         this.slider.setAttribute("type", "range");
         this.slider.setAttribute("min", "16");
         this.slider.setAttribute("max", "100");
         this.slider.setAttribute("value", "16");
-
-        
-
-        this.resolution.appendChild(this.slider);
+        this.slider.style.width = '100%';
+        this.sliderContainer.appendChild(this.slider);
 
         this.gridDisplay = document.createElement('p');
         this.gridDisplay.classList.add('gridDisplay');
         this.gridDisplay.textContent = 'Grid size: ' + this.gridSize.toString() + " x " + this.gridSize.toString();
-        
+    
+        this.controlContainer.append(this.sliderContainer, this.gridDisplay);
 
-        this.controlContainer.append(this.resolution, this.gridDisplay);
-
+        this.mainContainer.appendChild(this.controlContainer);
         //grid setup
         this.gridContainer = document.createElement('div');
         this.gridContainer.setAttribute('id', 'grid');
@@ -60,7 +76,7 @@ class View {
             this.gridContainer.appendChild(cell);
         }
 
-        this.app.append(this.controlContainer, this.gridContainer);
+        this.mainContainer.append(this.gridContainer);
 
         const width = this.gridContainer.offsetWidth;
         this.gridContainer.style.height = width.toString() + "px";
@@ -90,18 +106,16 @@ class View {
 
     buildGrid() {
 
+        //remove all existing cells
         while (this.gridContainer.lastChild) {
             this.gridContainer.removeChild(this.gridContainer.lastChild);
         }
-
+        //get dimensions
         const sizeSquared = this.gridSize * this.gridSize;
-
         const width = this.gridContainer.offsetWidth;
-        console.log(width);
         const cellWidth = Math.floor(width/this.gridSize);
-        console.log(cellWidth);
 
-
+        //create cells
         for (let i = 0; i < sizeSquared; i++) {
             let cell = document.createElement('div');
             cell.classList.add('cell');
