@@ -1,8 +1,20 @@
+class EtchaSketch {
+    constructor(){}
+
+    initGrid() {
+
+    }
+
+}
+
 class View {
+    gridValue = 16;
+    
     constructor() {
         this.app = document.querySelector('#root');
         this.cells = [256];
 
+        //create controls
         this.controlContainer = document.createElement('div');
         this.controlContainer.setAttribute('id', 'controls');
 
@@ -14,9 +26,16 @@ class View {
         this.slider.setAttribute("max", "100");
         this.slider.setAttribute("value", "16");
 
+        
+
         this.resolution.appendChild(this.slider);
 
+        this.gridDisplay = document.createElement('p');
+        this.gridDisplay.classList.add('gridDisplay');
+        this.gridDisplay.textContent = 'Grid size: ' + this.gridValue.toString() + " x " + this.gridValue.toString();
+        
 
+        this.controlContainer.append(this.resolution, this.gridDisplay);
 
         //grid setup
         this.gridContainer = document.createElement('div');
@@ -35,14 +54,13 @@ class View {
                     if (rgb[i] >= 20) rgb[i] = rgb[i] - 20;
                 }
                 var newcol = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
-                console.log(newcol);
                 c.style.backgroundColor = newcol;
             });
             this.cells[i] = cell;
             this.gridContainer.appendChild(cell);
         }
 
-        this.app.append(this.resolution, this.gridContainer);
+        this.app.append(this.controlContainer, this.gridContainer);
 
         const width = this.gridContainer.offsetWidth;
         this.gridContainer.style.height = width.toString() + "px";
@@ -55,7 +73,18 @@ class View {
         }
 
         console.log(this.slider.value);
+
+
+        this.slider.addEventListener('click', (e) => {
+            //this.gridValue = e.target.value;
+            this.updateGridSize(e.target.value);
+        });
         
+    }
+
+    updateGridSize(val) {
+        this.gridValue = val;
+        this.gridDisplay.textContent = 'Grid size: ' + this.gridValue.toString() + " x " + this.gridValue.toString();
     }
 
     onHover(cell) {
