@@ -44,6 +44,12 @@ class View {
         this.slider.setAttribute("max", "100");
         this.slider.setAttribute("value", "16");
         this.slider.style.width = '100%';
+
+        this.slider.addEventListener('click', (e) => {
+            this.updateGridSize(e.target.value);
+            this.buildGrid();
+        });
+
         this.sliderContainer.appendChild(this.slider);
 
         this.gridDisplay = document.createElement('p');
@@ -53,48 +59,13 @@ class View {
         this.controlContainer.append(this.sliderContainer, this.gridDisplay);
 
         this.mainContainer.appendChild(this.controlContainer);
-        //grid setup
+        //create canvas
         this.gridContainer = document.createElement('div');
         this.gridContainer.setAttribute('id', 'grid');
-
-        //set up cells and add event trigger
-        for (let i = 0; i < 256; i++) {
-            let cell = document.createElement('div');
-            cell.classList.add('cell');
-            cell.setAttribute('id', 'c' + i.toString());
-            cell.style.backgroundColor = 'rgb(255,255,255)';
-            cell.addEventListener('mouseenter', function (e) {
-                var c = document.querySelector("#" + e.target.id);
-                var rgb = View.colorValues(c.style.backgroundColor);
-                for (let i = 0; i < 3;i++) {
-                    if (rgb[i] >= 20) rgb[i] = rgb[i] - 20;
-                }
-                var newcol = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
-                c.style.backgroundColor = newcol;
-            });
-            this.cells[i] = cell;
-            this.gridContainer.appendChild(cell);
-        }
-
         this.mainContainer.append(this.gridContainer);
 
-        const width = this.gridContainer.offsetWidth;
-        this.gridContainer.style.height = width.toString() + "px";
-        const cellWidth = Math.floor(width/17);
-
-        for (let i = 0; i < 256; i++) {
-            let cell = this.cells[i];
-            cell.style.width = cellWidth.toString() + "px";
-            cell.style.height = cellWidth.toString() + "px";
-        }
-
-        console.log(this.slider.value);
-
-
-        this.slider.addEventListener('click', (e) => {
-            this.updateGridSize(e.target.value);
-            this.buildGrid();
-        });
+        //set up cells
+        this.buildGrid();
         
     }
 
@@ -105,7 +76,6 @@ class View {
 
 
     buildGrid() {
-
         //remove all existing cells
         while (this.gridContainer.lastChild) {
             this.gridContainer.removeChild(this.gridContainer.lastChild);
@@ -113,7 +83,7 @@ class View {
         //get dimensions
         const sizeSquared = this.gridSize * this.gridSize;
         const width = this.gridContainer.offsetWidth;
-        const cellWidth = Math.floor(width/this.gridSize);
+        const cellWidth = Math.floor(width/this.gridSize) -1 ;
 
         //create cells
         for (let i = 0; i < sizeSquared; i++) {
@@ -123,14 +93,9 @@ class View {
             cell.style.backgroundColor = 'rgb(255,255,255)';
             cell.style.width = cellWidth.toString() + "px";
             cell.style.height = cellWidth.toString() + "px";
-            cell.addEventListener('mouseenter', function (e) {
+            cell.addEventListener('mouseenter', (e) => {
                 var c = document.querySelector("#" + e.target.id);
-                var rgb = View.colorValues(c.style.backgroundColor);
-                for (let i = 0; i < 3;i++) {
-                    if (rgb[i] >= 20) rgb[i] = rgb[i] - 20;
-                }
-                var newcol = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
-                c.style.backgroundColor = newcol;
+                this.onHover(c);
             });
             this.cells[i] = cell;
             this.gridContainer.appendChild(cell);
@@ -138,8 +103,12 @@ class View {
     }
 
     onHover(cell) {
-        let c = this.style.backgroundColor;
-        console.log(cell);
+        var rgb = View.colorValues(cell.style.backgroundColor);
+        for (let i = 0; i < 3;i++) {
+            if (rgb[i] >= 20) rgb[i] = rgb[i] - 20;
+        }
+        var newcol = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+        cell.style.backgroundColor = newcol;
 
     }
 
