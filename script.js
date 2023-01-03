@@ -9,6 +9,7 @@ class EtchaSketch {
 
 class View {
     gridSize = 16;
+    drawingMode = 'grey';
     
     constructor() {
         this.app = document.querySelector('#root');
@@ -56,13 +57,23 @@ class View {
         this.gridDisplay.classList.add('gridDisplay');
         this.gridDisplay.textContent = 'Grid size: ' + this.gridSize.toString() + " x " + this.gridSize.toString();
     
-
+        //create buttons
         this.btn_grey = document.createElement('button');
         this.btn_grey.setAttribute('id', 'btn_grey');
+        this.btn_grey.classList.add("btn");
+        this.btn_grey.classList.add("btnActive");
         this.btn_grey.textContent = "Grey";
         this.btn_rainbow = document.createElement('button');
         this.btn_rainbow.setAttribute('id', 'btn_rainbow');
+        this.btn_rainbow.classList.add("btn");
         this.btn_rainbow.textContent = "Rainbow";
+
+        this.btn_grey.addEventListener('click', (e) => {
+            this.setDrawingMode('grey');
+        });
+        this.btn_rainbow.addEventListener('click', (e) => {
+            this.setDrawingMode('rainbow');
+        });
 
         this.btnContainer = document.createElement('div');
         this.btnContainer.classList.add('btnContainer');
@@ -71,7 +82,11 @@ class View {
 
         this.controlContainer.append(this.sliderContainer, this.gridDisplay, this.btnContainer);
 
+
         this.mainContainer.appendChild(this.controlContainer);
+
+
+
         //create canvas
         this.gridContainer = document.createElement('div');
         this.gridContainer.setAttribute('id', 'grid');
@@ -112,22 +127,66 @@ class View {
             cell.style.height = cellWidth.toString() + "px";
             cell.addEventListener('mouseenter', (e) => {
                 var c = document.querySelector("#" + e.target.id);
-                this.onHover(c);
+                this.draw(c);
             });
             this.cells[i] = cell;
             this.gridContainer.appendChild(cell);
         }
     }
 
-    onHover(cell) {
+    draw(cell) {
         var rgb = View.colorValues(cell.style.backgroundColor);
-        for (let i = 0; i < 3;i++) {
-            if (rgb[i] >= 20) rgb[i] = rgb[i] - 20;
+
+        //grey value mode
+        if (this.drawingMode === 'grey') {
+            for (let i = 0; i < 3;i++) {
+                if (rgb[i] >= 20) rgb[i] = rgb[i] - 20;
+            }
         }
+
+        //rainbow mode
+        if (this.drawingMode === 'rainbow') {
+            for (let i = 0; i < 3;i++) {
+                rgb[i] = Math.random() * 255;
+            }
+        }
+
+        //apply new color
         var newcol = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
         cell.style.backgroundColor = newcol;
 
     }
+
+    setDrawingMode(mode){
+
+        console.log('button clicked!');
+        if (mode.toLowerCase() !== 'grey' && mode.toLowerCase() !== 'rainbow') return
+
+        this.resetButtons();
+        this.drawingMode = mode.toLowerCase();
+
+        if (this.drawingMode === 'grey') {
+            
+            //set to active
+            this.btn_grey.classList.add('btnActive');
+        }
+        if (this.drawingMode === 'rainbow') {
+            //set to active
+            this.btn_rainbow.classList.add('btnActive');
+        }
+
+        console.log(this.drawingMode);
+    }
+
+    resetButtons() {
+        //set all buttons to inactive
+        var children = this.btnContainer.children;
+        for (var i = 0; i < children.length; i++) {
+            children[i].classList.remove('btnActive');
+        }
+    }
+
+    //helper methods
 
     // return array of [r,g,b,a] from any valid color. if failed returns undefined
     static colorValues(color){

@@ -2,14 +2,13 @@ body{
     box-sizing: border-box;
 }
 #root {
-    width: 100vw;
-    height:100vh;
-    border-color: brown;
-    border-style: solid;
+    width: 98vw;
+    height:98vh;
     margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     font-family: 'Roboto', sans-serif;
 
 }
@@ -33,7 +32,7 @@ body{
 #controls {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     padding: 2em 3em;
     background-color: rgb(85, 85, 85);
     flex-grow: 1;
@@ -43,7 +42,25 @@ body{
 .btnContainer {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
+    gap: 1em;
 }
+
+.btn {
+    background-color: grey;
+    color: white;
+    border-style: none;
+    border-radius: 0.5em;
+    padding: 0.5em;
+}
+
+.btnActive {
+    background-color: white;
+    color: red;
+    font-weight: bold;
+    
+}
+
 
 #grid {
     width: 70%;
@@ -55,3 +72,4 @@ body{
     border-color:bisque;
     border-style: solid;
 }
+
