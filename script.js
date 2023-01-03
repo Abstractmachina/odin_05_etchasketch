@@ -46,7 +46,7 @@ class View {
         this.slider.style.width = '100%';
 
         this.slider.addEventListener('click', (e) => {
-            this.updateGridSize(e.target.value);
+            this.updateGridResolution(e.target.value);
             this.buildGrid();
         });
 
@@ -56,20 +56,35 @@ class View {
         this.gridDisplay.classList.add('gridDisplay');
         this.gridDisplay.textContent = 'Grid size: ' + this.gridSize.toString() + " x " + this.gridSize.toString();
     
-        this.controlContainer.append(this.sliderContainer, this.gridDisplay);
+
+        this.btn_grey = document.createElement('button');
+        this.btn_grey.setAttribute('id', 'btn_grey');
+        this.btn_grey.textContent = "Grey";
+        this.btn_rainbow = document.createElement('button');
+        this.btn_rainbow.setAttribute('id', 'btn_rainbow');
+        this.btn_rainbow.textContent = "Rainbow";
+
+        this.btnContainer = document.createElement('div');
+        this.btnContainer.classList.add('btnContainer');
+
+        this.btnContainer.append(this.btn_grey, this.btn_rainbow);
+
+        this.controlContainer.append(this.sliderContainer, this.gridDisplay, this.btnContainer);
 
         this.mainContainer.appendChild(this.controlContainer);
         //create canvas
         this.gridContainer = document.createElement('div');
         this.gridContainer.setAttribute('id', 'grid');
+        const width = this.gridContainer.offsetWidth;
+        console.log(width);
+        
         this.mainContainer.append(this.gridContainer);
 
         //set up cells
         this.buildGrid();
-        
     }
 
-    updateGridSize(val) {
+    updateGridResolution(val) {
         this.gridSize = val;
         this.gridDisplay.textContent = 'Grid size: ' + this.gridSize.toString() + " x " + this.gridSize.toString();
     }
@@ -83,7 +98,9 @@ class View {
         //get dimensions
         const sizeSquared = this.gridSize * this.gridSize;
         const width = this.gridContainer.offsetWidth;
-        const cellWidth = Math.floor(width/this.gridSize) -1 ;
+        const cellWidth = Math.floor(width/this.gridSize) ;
+        this.mainContainer.style.height = width.toString() + 'px';
+        //this.gridContainer.style.height = width.toString() + 'px';
 
         //create cells
         for (let i = 0; i < sizeSquared; i++) {
